@@ -27,7 +27,9 @@ td.coolButton {
 }
 tr:nth-child(even) {
     background-color: #dddddd;
-}div.container {
+}
+
+div.container {
     width: 100%;
     border: 1px solid gray;
 }
@@ -58,7 +60,7 @@ nav ul a {
     text-decoration: none;
 }
 article {
-    margin-left: 170px;
+    margin-left: 232px;
     border-left: 1px solid gray;
     padding: 1em;
     overflow: hidden;
@@ -93,4 +95,30 @@ h1 {
     font-size: 18px;
     
     font-family: arial, sans-serif;
+}
+
+.message-bubble 
+{
+    padding: 10px 0px 10px 0px;
+}
+
+.message-bubble:nth-child(even) { background-color: #F5F5F5; }
+
+.message-bubble > *
+{
+    padding-left: 10px;
+    font-family: arial, sans-serif;    
+}
+
+.panel-body { 
+    padding: 0px;
+    height: 230px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.panel-heading { 
+    background-color: black; 
+    color: white;
+    font-family: arial, sans-serif; 
 }

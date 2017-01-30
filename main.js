@@ -19,6 +19,10 @@ var doshClick = 1;
 var doshUpClickCost = 10;
 var doshNumberOfTimesUpgraded = 0;
 
+//Research
+var science = 0;
+var cloneVatsResearched = 0;
+
 //Buildings
 var houses = 0;
 var houseUpgradeCost = 1000;
@@ -32,6 +36,8 @@ var mines = 0;
 var mineCost = 100;
 var cloneVats = 0;
 var cloneVatCost = 10000;
+var laboratories = 0;
+var laboratoryCost = 3000;
 
 function farm() {
     food += foodClick;
@@ -45,6 +51,7 @@ function upFarmClick(){
         foodUpClickCost = Math.round((10+foodUpClickCost) * 1.5);
         foodClick += Math.ceil(1 + (foodNumberOfTimesUpgraded*0.5));
         foodNumberOfTimesUpgraded++;
+        addEventLogMsg("Food farming skill improved");
     }
     update();
 }
@@ -60,6 +67,7 @@ function upDoshClick(){
         doshUpClickCost = Math.round((10+doshUpClickCost) * 1.5);
         doshClick += Math.ceil(1 + (doshNumberOfTimesUpgraded*0.5));
         doshNumberOfTimesUpgraded++;
+        addEventLogMsg("Dosh making skill improved");
     }
     update();
 }
@@ -69,6 +77,7 @@ function populate() {
         population++;
         food -= popCost;
         popCost = Math.round((10+popCost) * 1.5);
+        addEventLogMsg("Another villager joined your village");
     }
     update();
 }
@@ -78,6 +87,7 @@ function buildHouse(){
         dosh -= houseCost;
         houses++;
         houseCost = Math.round((10+houseCost) * 1.5);
+        addEventLogMsg("Built a house")
     }
     update();
 }
@@ -89,6 +99,7 @@ function buildFarm(){
         farmCost = Math.round((10+farmCost) * 1.5);
         foodPS++;
         foodLimit = Math.round((10+foodLimit) * 1.5);
+        addEventLogMsg("Built a farm");
     }
     update();
 }
@@ -99,6 +110,7 @@ function buildMine(){
         mines++;
         mineCost = Math.round((10+mineCost) * 1.5);
         doshPS++;
+        addEventLogMsg("Built a mine");
     }
     update();
 }
@@ -109,6 +121,17 @@ function buildCloneVat(){
         cloneVats++;
         cloneVatCost = Math.round((10+cloneVatCost) * 1.5);
         popPS++;
+        addEventLogMsg("Built a clone vat, clone production initiated");
+    }
+    update();
+}
+
+function buildLaboratory() {
+    if (dosh >= laboratoryCost) {
+        dosh -= laboratoryCost;
+        laboratories++;
+        laboratoryCost = Math.round((10+laboratoryCost) * 1.5);
+        addEventLogMsg("Built a laboratory, science commenced");
     }
     update();
 }
@@ -119,8 +142,17 @@ function upgradeHouse(){
         popPerHouse++;
         houseNumberOfUpgrades++;
         houseUpgradeCost = Math.round((10+houseUpgradeCost) * 1.5);
+        addEventLogMsg("Upgraded houses, each house can now hold " + (houseNumberOfUpgrades + 1) + " villagers");
     }
     update();
+}
+
+function researchCloneVats() {
+    if (science >= 100) {
+        science -= 100;
+        cloneVatsResearched = 1;
+        addEventLogMsg("Researched clone vats");
+    }
 }
 
 
@@ -151,10 +183,25 @@ var minesObj;
 var mineCostObj;
 var cloneVatsObj;
 var cloneVatCostObj;
+var laboratoriesObj;
+var laboratoryCostObj;
+var scienceObj;
 
 //UI Objects
+var sciencePSID;
 var doshCIObj;
 var foodCIObj;
+var eventObj;
+var scrollObj;
+var scienceTabObj;
+var labTabObj;
+var cloneVatTabObj;
+var labButtonObj;
+var cloneVatButtonObj;
+var researchTableObj;
+var cloneVatRObj;
+var researchButtonsObj;
+var researchCVButtonObj;
 
 function init() {
     //load storage
@@ -190,6 +237,11 @@ function init() {
             mineCost = Number(localStorage.mineCost);
             cloneVats = Number(localStorage.cloneVats);
             cloneVatCost = Number(localStorage.cloneVatCost);
+            laboratories = Number(localStorage.laboratories);
+            laboratoryCost = Number(localStorage.laboratoryCost);
+
+            science = Number(localStorage.science);
+            cloneVatsResearched = Number(localStorage.cloneVatsResearched);
         }
     } 
 
@@ -220,8 +272,27 @@ function init() {
     mineCostObj = document.getElementById("mineCostID");
     cloneVatsObj = document.getElementById("cloneVatID");
     cloneVatCostObj = document.getElementById("cloneVatCostID");
+    laboratoriesObj = document.getElementById("laboratoriesID");
+    laboratoryCostObj = document.getElementById("laboratoryCostID");
+    scienceObj = document.getElementById("scienceID");
+
+    //UI stuff
+    sciencePSID = document.getElementById("sciencePSID");
     doshCIObj = document.getElementById("doshCIIDtest");
     foodCIObj = document.getElementById("foodCIIDtest");
+    scienceTabObj = document.getElementById("scienceTabID");
+    labTabObj = document.getElementById("labTabID");
+    cloneVatTabObj = document.getElementById("cloneVatTabID");
+    labButtonObj = document.getElementById("labButtonID");
+    cloneVatButtonObj = document.getElementById("cloneVatButtonID");
+    researchTableObj = document.getElementById("researchTableID");
+    cloneVatRObj = document.getElementById("cloneVatRID");
+    researchButtonsObj = document.getElementById("researchButtonsID");
+    researchCVButtonObj = document.getElementById("researchCVButtonID");
+
+    //Eventlog
+    eventObj = document.getElementById("eventLogID");
+    scrollObj = document.getElementById("scrollID");
     update();
 }
 function update() {
@@ -230,7 +301,7 @@ function update() {
     doshPSObj.innerHTML = (doshPS * population);
     doshClickObj.innerHTML = doshClick;
     foodObj.innerHTML = food;
-    foodPSObj.innerHTML = foodPS;
+    foodPSObj.innerHTML = foodPS - population;
     foodClickObj.innerHTML = foodClick;
     foodLimitObj.innerHTML = foodLimit;
     populationObj.innerHTML = population;
@@ -253,13 +324,37 @@ function update() {
     cloneVatCostObj.innerHTML = cloneVatCost + " dosh";
     doshCIObj.innerHTML = Math.ceil(1 + (doshNumberOfTimesUpgraded*0.1));
     foodCIObj.innerHTML = Math.ceil(1 + (foodNumberOfTimesUpgraded*0.1));
+    laboratoriesObj.innerHTML = laboratories;
+    laboratoryCostObj.innerHTML = laboratoryCost;
+    scienceObj.innerHTML = science;
+    sciencePSID.innerHTML = laboratories;
+
+    //triggers
+    if ((dosh > 2000) || laboratories > 0 && labTabObj.hidden == true) {
+            labTabObj.hidden = false;
+            labButtonObj.style.display = "block";
+    }    
+    if (laboratories > 0) {
+            scienceTabObj.hidden = false;
+            researchTableObj.hidden = false;
+            researchButtonsObj.hidden = false;
+            if (cloneVatsResearched == 1) {
+                researchCVButtonObj.style.display = "none";
+            } else {
+                researchCVButtonObj.style.display = "block";
+            }
+    }    
+    if (cloneVatsResearched == 1) {
+            cloneVatTabObj.hidden = false;
+            cloneVatRObj.hidden = true;
+            cloneVatButtonObj.style.display = "block";
+    }
 }
 
 function store() {
     if (dontsave) {
         return;
-    }
-    if(typeof(Storage) !== "undefined") {
+    } else if(typeof(Storage) !== "undefined") {
         localStorage.population = population;
         localStorage.popCost = popCost;
         localStorage.popPS = popPS;
@@ -290,6 +385,10 @@ function store() {
         localStorage.mineCost = mineCost;
         localStorage.cloneVats = cloneVats;
         localStorage.cloneVatCost = cloneVatCost;
+        localStorage.laboratories = laboratories;
+        localStorage.laboratoryCost = laboratoryCost;
+        localStorage.science = science;
+        localStorage.cloneVatsResearched = cloneVatsResearched;
     }
 }
 
@@ -301,13 +400,26 @@ function upkeep() {
         food = foodLimit;
     }
     dosh += (doshPS * population);
-    population += popPS;
+    if (food > 0) {
+        population += popPS;
+    }
     if(population > (popPerHouse * houses)) {
         population = (popPerHouse * houses);
     }
-    if(food < 0) {
-        population--;
+    if(food < 0 && population > 0) {
+        var deathCount = 0;
+        while (food < 0) {
+            food++;
+            population--;
+            deathCount++;
+        }
+        if (deathCount > 1) {
+            addEventLogMsg("A villager starved to death x" + deathCount);
+        } else {
+            addEventLogMsg("A villager starved to death");
+        }
     }
+    science += laboratories;
     update();
 }
 
@@ -315,4 +427,21 @@ var dontsave = false;
 function reset() {
     dontsave = true;
     localStorage.clear();
+}
+
+function addEventLogMsg(event) {
+    var newChatBubble = document.createElement('div');
+    newChatBubble.className = 'row message-bubble';
+
+    var chatMessage = document.createElement('p');
+    chatMessage.className = 'text-muted';
+    chatMessage.innerHTML = event;
+
+    newChatBubble.appendChild(chatMessage);
+    eventObj.appendChild(newChatBubble);
+
+    scrollObj.scrollTop = scrollObj.scrollHeight;
+    if(eventObj.children.length > 20) {
+        eventObj.removeChild(eventObj.firstChild);
+    }
 }

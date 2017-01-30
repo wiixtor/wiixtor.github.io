@@ -13,23 +13,28 @@
             <h1> Vilage People </h1>
         </header>   
 
+        <!- Buttons ->
         <nav>
             <h1> Basic functions </h1>
-            <button class="button" onclick = "makeDosh()"> Make some dosh </button>
-            <button class="button"onclick = "farm()"> Farm some food </button>
-            <button class="button"onclick = "populate()"> Populate your village </button>
+            <button type="button" class="button" onclick = "makeDosh()"> Make some dosh </button>
+            <button type="button"class="button"onclick = "farm()"> Farm some food </button>
+            <button type="button"class="button"onclick = "populate()"> Populate your village </button>
             <h1> Buildings </h1>
-            <button class="button"onclick = "buildHouse()"> Build a house </button>
-            <button class="button"onclick = "buildFarm()"> Build a farm </button>
-            <button class="button"onclick = "buildMine()"> Build a mine </button>
-            <button class="button"onclick = "buildCloneVat()"> Build a cloning vat </button>
+            <button type="button"class="button"onclick = "buildHouse()"> Build a house </button>
+            <button type="button"class="button"onclick = "buildFarm()"> Build a farm </button>
+            <button type="button"class="button"onclick = "buildMine()"> Build a mine </button>
+            <button id="labButtonID" type="button"class="button" style="display:none;" onclick = "buildLaboratory()"> Build a laboratory </button>
+            <button id="cloneVatButtonID" type="button"class="button" style="display:none;" onclick = "buildCloneVat()"> Build a cloning vat </button>
             <h1> Upgrades </h1>
-            <button class="button"onclick = "upDoshClick()"> More dosh per click </button>
-            <button class="button"onclick = "upFarmClick()"> More food per click </button>
-            <button class="button"onclick = "upgradeHouse()"> Upgrade house </button>
+            <button type="button"class="button"onclick = "upDoshClick()"> More dosh per click </button>
+            <button type="button"class="button"onclick = "upFarmClick()"> More food per click </button>
+            <button type="button"class="button"onclick = "upgradeHouse()"> Upgrade house </button>
+            <h1 id="researchButtonsID" hidden=true> Research </h1>
+            <button id="researchCVButtonID" type="button"class="button" style="display:none;" onclick = "researchCloneVats()"> Research cloning vats </button>
         </nav>
         
         <article>
+            <!- Resource Table ->
             <table>
                 <tr>
                     <th>Resource</th>
@@ -62,8 +67,17 @@
                     <td id="popsPSID"> </td>
                     <td id="popCostID"> </td>
                     <td id="popLimitID"> </td>
+                </tr>                
+                <tr id="scienceTabID" hidden=true>
+                    <td>Science</td>
+                    <td id="scienceID"> </td>
+                    <td> N/A </td>
+                    <td id="sciencePSID"> </td>
+                    <td> N/A </td>
+                    <td> Inf </td>
                 </tr>
             </table>
+            <!- Buildings Table ->
             <table>
                 <tr>
                     <th> Building </th>
@@ -88,14 +102,21 @@
                     <td> Produces dosh, is multplied by your population </td>
                     <td id="mineID"></td>
                     <td id="mineCostID"></td>
-                </tr>    
-                <tr>
-                    <td> Cloning vat</td>
+                </tr>                 
+                <tr id="labTabID" hidden=true>
+                    <td> Laboratories </td>
+                    <td> Produces science </td>
+                    <td id="laboratoriesID"></td>
+                    <td id="laboratoryCostID"></td>
+                </tr>   
+                <tr id="cloneVatTabID" hidden=true>
+                    <td> Cloning vat </td>
                     <td> Produces people, beware this will drain your food fast </td>
                     <td id="cloneVatID"></td>
                     <td id="cloneVatCostID"></td>
                 </tr>     
             </table>
+            <!- Upgrades Table ->
             <table>
                 <tr>
                     <th>Upgrades</th>
@@ -121,8 +142,35 @@
                     <td id="houseUCNUMID"> </td> 
                     <td id="houseUCID"> </td>
                 </tr>  
+            </table>    
+            <!- Research table ->        
+            <table id="researchTableID" hidden=true>
+                <tr>
+                    <th>Research</th>
+                    <th>Description</th>
+                    <th>Cost</th>
+                </tr>            
+                <tr id="cloneVatRID">
+                    <td> Research clone vats </td>
+                    <td> Clone vats automatically produce villagers </td>
+                    <td> 100 science </td>
+                </tr> 
             </table>
         </article>
+        <!- Event log ->
+        <article>
+            <div class="container">
+                <div class="row">
+                    <div class="panel panel-default">
+                    <div class="panel-heading"> Event log </div>
+                    <div id=scrollID class="panel-body">
+                        <div id="eventLogID" class="container"></div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+        <!- Footer ->
         <footer>
             <button class="button"onclick = "reset()"> RESET, then reload page </button>
         </footer>

@@ -220,8 +220,8 @@ function init() {
     mineCostObj = document.getElementById("mineCostID");
     cloneVatsObj = document.getElementById("cloneVatID");
     cloneVatCostObj = document.getElementById("cloneVatCostID");
-    doshCIObj = document.getElementById("doshCIID");
-    foodCIObj = document.getElementById("foodCIID");
+    doshCIObj = document.getElementById("doshCIIDtest");
+    foodCIObj = document.getElementById("foodCIIDtest");
     update();
 }
 function update() {

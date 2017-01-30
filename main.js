@@ -330,7 +330,7 @@ function update() {
     sciencePSID.innerHTML = laboratories;
 
     //triggers
-    if ((dosh > 2000) || laboratories > 0 && labTabObj.hidden == true) {
+    if ((dosh > 2000) || laboratories > 0) {
             labTabObj.hidden = false;
             labButtonObj.style.display = "block";
     }    
@@ -360,7 +360,7 @@ function store() {
         localStorage.popPS = popPS;
 
         localStorage.food = food;
-        localStorage.foodPS = foodPS;
+        localStorage.foodPS = foodPS - population;
         localStorage.foodClick = foodClick;
         localStorage.foodLimit = foodLimit;
 

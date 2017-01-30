@@ -309,18 +309,10 @@ function upkeep() {
         population--;
     }
     update();
-    if (Math.random() <= 0.01) {
-        yee();
-    }
 }
 
 var dontsave = false;
 function reset() {
     dontsave = true;
     localStorage.clear();
-}
-
-function yee() {
-    var snd = new Audio("yee.wav");
-    snd.play();
 }

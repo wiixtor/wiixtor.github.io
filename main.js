@@ -42,8 +42,8 @@ function farm() {
 function upFarmClick(){
     if(dosh >= foodUpClickCost) {
         dosh -= foodUpClickCost;
-        foodUpClickCost = Math.round(Math.pow(foodUpClickCost, 1.2));
-        foodClick++;
+        foodUpClickCost = Math.round((10+foodUpClickCost) * 1.5);
+        foodClick += Math.ceil(1 + (foodNumberOfTimesUpgraded*0.5));
         foodNumberOfTimesUpgraded++;
     }
     update();
@@ -57,8 +57,8 @@ function makeDosh() {
 function upDoshClick(){
     if(dosh >= doshUpClickCost) {
         dosh -= doshUpClickCost;
-        doshUpClickCost = Math.round(Math.pow(doshUpClickCost, 1.2));
-        doshClick++;
+        doshUpClickCost = Math.round((10+doshUpClickCost) * 1.5);
+        doshClick += Math.ceil(1 + (doshNumberOfTimesUpgraded*0.5));
         doshNumberOfTimesUpgraded++;
     }
     update();
@@ -68,7 +68,7 @@ function populate() {
     if (food >= popCost && (population+1) <= (houses * popPerHouse)) {
         population++;
         food -= popCost;
-        popCost = Math.round(Math.pow(popCost, 1.2));
+        popCost = Math.round((10+popCost) * 1.5);
     }
     update();
 }
@@ -77,7 +77,7 @@ function buildHouse(){
     if (dosh >= houseCost) {
         dosh -= houseCost;
         houses++;
-        houseCost = Math.round(Math.pow(houseCost, 1.2));
+        houseCost = Math.round((10+houseCost) * 1.5);
     }
     update();
 }
@@ -86,9 +86,9 @@ function buildFarm(){
     if (dosh >= farmCost) {
         dosh -= farmCost;
         farms++;
-        farmCost = Math.round(Math.pow(farmCost, 1.2));
+        farmCost = Math.round((10+farmCost) * 1.5);
         foodPS++;
-        foodLimit = Math.round(Math.pow(foodLimit, 1.2));
+        foodLimit = Math.round((10+foodLimit) * 1.5);
     }
     update();
 }
@@ -97,7 +97,7 @@ function buildMine(){
     if (dosh >= mineCost) {
         dosh -= mineCost;
         mines++;
-        mineCost = Math.round(Math.pow(mineCost, 1.2));
+        mineCost = Math.round((10+mineCost) * 1.5);
         doshPS++;
     }
     update();
@@ -107,7 +107,7 @@ function buildCloneVat(){
     if (dosh >= cloneVatCost) {
         dosh -= cloneVatCost;
         cloneVats++;
-        cloneVatCost = Math.round(Math.pow(mineCost, 1.3));
+        cloneVatCost = Math.round((10+cloneVatCost) * 1.5);
         popPS++;
     }
     update();
@@ -118,7 +118,7 @@ function upgradeHouse(){
         dosh -= houseUpgradeCost;
         popPerHouse++;
         houseNumberOfUpgrades++;
-        houseUpgradeCost = Math.round(Math.pow(houseUpgradeCost, 1.2));
+        houseUpgradeCost = Math.round((10+houseUpgradeCost) * 1.5);
     }
     update();
 }
@@ -151,6 +151,10 @@ var minesObj;
 var mineCostObj;
 var cloneVatsObj;
 var cloneVatCostObj;
+
+//UI Objects
+var doshCIObj;
+var foodCIObj;
 
 function init() {
     //load storage
@@ -216,6 +220,8 @@ function init() {
     mineCostObj = document.getElementById("mineCostID");
     cloneVatsObj = document.getElementById("cloneVatID");
     cloneVatCostObj = document.getElementById("cloneVatCostID");
+    doshCIObj = document.getElementById("doshCIID");
+    foodCIObj = document.getElementById("foodCIID");
     update();
 }
 function update() {
@@ -233,7 +239,7 @@ function update() {
     popPSObj.innerHTML = popPS;
     housesObj.innerHTML = houses;
     houseCostObj.innerHTML = houseCost + " dosh";
-    houseUpgradeCostObj.innerHTML = houseUpgradeCost;
+    houseUpgradeCostObj.innerHTML = houseUpgradeCost + " dosh";
     houseNumberOfUpgradesObj.innerHTML = houseNumberOfUpgrades;
     farmsObj.innerHTML = farms;
     farmCostObj.innerHTML = farmCost + " dosh";
@@ -244,7 +250,9 @@ function update() {
     doshUpClickCostObj.innerHTML = doshUpClickCost + " dosh";
     doshNumberOfTimesUpgradedObj.innerHTML = doshNumberOfTimesUpgraded;
     cloneVatsObj.innerHTML = cloneVats;
-    cloneVatCostObj.innerHTML = cloneVatCost;
+    cloneVatCostObj.innerHTML = cloneVatCost + " dosh";
+    doshCIObj.innerHTML = Math.ceil(1 + (doshNumberOfTimesUpgraded*0.1));
+    foodCIObj.innerHTML = Math.ceil(1 + (foodNumberOfTimesUpgraded*0.1));
 }
 
 function store() {
@@ -301,10 +309,18 @@ function upkeep() {
         population--;
     }
     update();
+    if (Math.random() <= 0.01) {
+        yee();
+    }
 }
 
 var dontsave = false;
 function reset() {
     dontsave = true;
     localStorage.clear();
+}
+
+function yee() {
+    var snd = new Audio("yee.wav");
+    snd.play();
 }

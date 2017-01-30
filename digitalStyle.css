@@ -1,0 +1,96 @@
+body {
+    background-color: white;
+}
+li {
+    display: inline;
+}
+ul {
+    border-style: solid;
+}
+a {
+    color: black
+}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+}
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+td.coolButton {
+    background-color:green;
+    color:green;
+}
+tr:nth-child(even) {
+    background-color: #dddddd;
+}div.container {
+    width: 100%;
+    border: 1px solid gray;
+}
+
+header, footer {
+    
+    font-family: arial, sans-serif;
+    padding: 1em;
+    color: white;
+    background-color: black;
+    clear: left;
+    text-align: center;
+}
+
+nav {
+    float: left;
+    max-width: 200px;
+    margin: 0;
+    padding: 1em;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+   
+nav ul a {
+    text-decoration: none;
+}
+article {
+    margin-left: 170px;
+    border-left: 1px solid gray;
+    padding: 1em;
+    overflow: hidden;
+}
+.button {
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 16px;
+  font-family: arial, sans-serif;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+  margin-top: 10px;
+}
+
+.button:hover {background-color: #3e8e41}
+
+.button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+h1 {
+    margin-bottom: 0px;
+    margin-top: 10px;
+    font-size: 18px;
+    
+    font-family: arial, sans-serif;
+}

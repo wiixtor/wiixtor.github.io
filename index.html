@@ -1,37 +1,127 @@
+<!DOCTYPE HTML>
 <html>
     <head>
         <script type="text/javascript" src="main.js"></script>
-            <style>
-                body {
-                    background-color: teal;
-                }
-            </style>
+        <link rel="stylesheet" type="text/css" href="digitalStyle.css">
     </head>
 
-    <body>
+    <body onload="init()">
+        
+    <div class="container">
+        <header>
+            <h1> Amazing incremental game </h1>
+        </header>   
 
-        <button onclick = "farm()"> Farm some food </button>
-        <button onclick = "makeDosh()"> Make some dosh </button>
-        <button onclick = "populate()"> Populate your village </button>
-        <button onclick = "buildHouse()"> Build more houses to live in </button>
-        <button onclick = "upFarmClick()"> Farm faster! </button>
-        <button onclick = "upDoshClick()"> Dosh faster! </button>
-        <p> Dosh </p>
-        <p id="doshID"> </p>        
-        <p> Food </p>
-        <p id="foodID"> </p>
-        <p> Population </p>
-        <p id="popsID"> </p>
-        <p> Pop cost </p>
-        <p id="popCostID"> </p>
-        <p> Houses </p>
-        <p id="houseID"> </p>
-        <p> House cost </p>
-        <p id="houseCostID"> </p>
-        <p> Farm clicker upgrade cost </p>
-        <p id="farmCCID"> </p>
-        <p> Dosh clicker upgrade cost </p>
-        <p id="doshCCID"> </p>
-
+        <nav>
+            <h1> Basic functions </h1>
+            <button class="button" onclick = "makeDosh()"> Make some dosh </button>
+            <button class="button"onclick = "farm()"> Farm some food </button>
+            <button class="button"onclick = "populate()"> Populate your village </button>
+            <h1> Buildings </h1>
+            <button class="button"onclick = "buildHouse()"> Build a house </button>
+            <button class="button"onclick = "buildFarm()"> Build a farm </button>
+            <button class="button"onclick = "buildMine()"> Build a mine </button>
+            <button class="button"onclick = "buildCloneVat()"> Build a cloning vat </button>
+            <h1> Upgrades </h1>
+            <button class="button"onclick = "upDoshClick()"> More dosh per click </button>
+            <button class="button"onclick = "upFarmClick()"> More food per click </button>
+            <button class="button"onclick = "upgradeHouse()"> Upgrade house </button>
+        </nav>
+        
+        <article>
+            <table>
+                <tr>
+                    <th>Resource</th>
+                    <th>#</th>
+                    <th>Per Click</th>
+                    <th>Per Second</th>
+                    <th>Cost</th>
+                    <th>Limit</th>
+                </tr>
+                <tr>
+                    <td>Dosh </td>
+                    <td id="doshID"> </td>
+                    <td id="doshPCID"> </td>
+                    <td id="doshPSID"> </td>
+                    <td>Free </td>
+                    <td>Inf </td>
+                </tr>
+                <tr>
+                    <td>Food</td>
+                    <td id="foodID"> </td>
+                    <td id="foodPCID"> </td>
+                    <td id="foodPSID"> </td>
+                    <td>Free </td>
+                    <td id="foodLimitID"> </td>
+                </tr>            
+                <tr>
+                    <td>Population, multiplies your dosh income</td>
+                    <td id="popsID"> </td>
+                    <td> 1 </td>
+                    <td id="popsPSID"> </td>
+                    <td id="popCostID"> </td>
+                    <td id="popLimitID"> </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <th> Building </th>
+                    <th> Desc </th>
+                    <th> # </th>
+                    <th> Cost </th>
+                </tr>
+                <tr>
+                    <td> Houses </td>
+                    <td> Houses people = number of upgrades </td>
+                    <td id="houseID"> </td>
+                    <td id="houseCostID"> </td>
+                </tr>
+                <tr>
+                    <td> Farms </td>
+                    <td> Produces food and raises food limit </td>
+                    <td id="farmID"></td>
+                    <td id="farmCostID"></td>
+                </tr>
+                <tr>
+                    <td> Mines </td>
+                    <td> Produces dosh, is multplied by your population </td>
+                    <td id="mineID"></td>
+                    <td id="mineCostID"></td>
+                </tr>    
+                <tr>
+                    <td> Cloning vat</td>
+                    <td> Produces people, beware this will drain your food fast </td>
+                    <td id="cloneVatID"></td>
+                    <td id="cloneVatCostID"></td>
+                </tr>     
+            </table>
+            <table>
+                <tr>
+                    <th>Upgrades</th>
+                    <th>Increase by</th>
+                    <th>#</th>
+                    <th>Cost</th>
+                </tr>            
+                <tr>
+                    <td> Dosh per click </td>
+                    <td> 1 </td>
+                    <td id="doshCCNUMID"> </td> 
+                    <td id="doshCCID"> </td>
+                </tr> 
+                <tr>
+                    <td> Food per click </td>
+                    <td> 1 </td>
+                    <td id="foodCCNUMID"> </td> 
+                    <td id="foodCCID"> </td>
+                </tr>   
+                <tr>
+                    <td> Upgrade house, more people per house </td>
+                    <td> 1 </td>
+                    <td id="houseUCNUMID"> </td> 
+                    <td id="houseUCID"> </td>
+                </tr>  
+            </table>
+        </article>
+    </div>
     </body>
 </html>

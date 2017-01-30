@@ -331,8 +331,8 @@ function update() {
     doshNumberOfTimesUpgradedObj.innerHTML = doshNumberOfTimesUpgraded;
     cloneVatsObj.innerHTML = cloneVats;
     cloneVatCostObj.innerHTML = cloneVatCost + " dosh";
-    doshCIObj.innerHTML = Math.ceil(1 + (doshNumberOfTimesUpgraded*0.1));
-    foodCIObj.innerHTML = Math.ceil(1 + (foodNumberOfTimesUpgraded*0.1));
+    doshCIObj.innerHTML = Math.ceil(1 + (doshNumberOfTimesUpgraded*0.5));
+    foodCIObj.innerHTML = Math.ceil(1 + (foodNumberOfTimesUpgraded*0.5));
     laboratoriesObj.innerHTML = laboratories;
     laboratoryCostObj.innerHTML = laboratoryCost + " dosh";
     scienceObj.innerHTML = science;

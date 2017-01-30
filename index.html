@@ -5,7 +5,7 @@
         <link rel="stylesheet" type="text/css" href="digitalStyle.css">
     </head>
 
-    <body onload="init()">
+    <body onload="init()" onunload="store()">
         
     <div class="container">
         <header>
@@ -122,6 +122,9 @@
                 </tr>  
             </table>
         </article>
+        <footer>
+            <button class="button"onclick = "reset()"> RESET, then reload page </button>
+        </footer>
     </div>
     </body>
 </html>

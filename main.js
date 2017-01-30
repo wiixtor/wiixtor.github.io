@@ -4,7 +4,7 @@ var popCost = 50;
 var popPS = 0;
 
 //Food variables
-var food = 1000;
+var food = 0;
 var foodPS = 0;
 var foodClick = 1;
 var foodLimit = 100;
@@ -13,7 +13,7 @@ var foodUpClickCost = 10;
 var foodNumberOfTimesUpgraded = 0;
 
 //Money variables
-var dosh = 10000;
+var dosh = 0;
 var doshPS = 0;
 var doshClick = 1;
 var doshUpClickCost = 10;
@@ -153,6 +153,43 @@ var cloneVatsObj;
 var cloneVatCostObj;
 
 function init() {
+    //load storage
+    if(typeof(Storage) !== "undefined") {
+        if (localStorage.dosh) {     
+            population = Number(localStorage.population);
+            popCost = Number(localStorage.popCost);
+            popPS = Number(localStorage.popPS);
+
+            food = Number(localStorage.food);
+            foodPS = Number(localStorage.foodPS);
+            foodClick = Number(localStorage.foodClick);
+            foodLimit = Number(localStorage.foodLimit);
+
+            foodUpClickCost = Number(localStorage.foodUpClickCost);
+            foodNumberOfTimesUpgraded = Number(localStorage.foodNumberOfTimesUpgraded);
+
+            dosh = Number(localStorage.dosh);
+            doshPS = Number(localStorage.doshPS);
+            doshClick = Number(localStorage.doshClick);
+            doshUpClickCost = Number(localStorage.doshUpClickCost);
+            doshNumberOfTimesUpgraded = Number(localStorage.doshNumberOfTimesUpgraded);
+
+            houses = Number(localStorage.houses);
+            houseUpgradeCost = Number(localStorage.houseUpgradeCost);
+            houseNumberOfUpgrades = Number(localStorage.houseNumberOfUpgrades);
+            popPerHouse = Number(localStorage.popPerHouse);
+            houseCost = Number(localStorage.houseCost);
+
+            farms = Number(localStorage.farms);
+            farmCost = Number(localStorage.farmCost);
+            mines = Number(localStorage.mines);
+            mineCost = Number(localStorage.mineCost);
+            cloneVats = Number(localStorage.cloneVats);
+            cloneVatCost = Number(localStorage.cloneVatCost);
+        }
+    } 
+
+    //store elements
     doshObj = document.getElementById("doshID");
     populationObj = document.getElementById("popsID");
     popCostObj = document.getElementById("popCostID");
@@ -182,6 +219,7 @@ function init() {
     update();
 }
 function update() {
+    //Elements
     doshObj.innerHTML = dosh;
     doshPSObj.innerHTML = (doshPS * population);
     doshClickObj.innerHTML = doshClick;
@@ -209,6 +247,44 @@ function update() {
     cloneVatCostObj.innerHTML = cloneVatCost;
 }
 
+function store() {
+    if (dontsave) {
+        return;
+    }
+    if(typeof(Storage) !== "undefined") {
+        localStorage.population = population;
+        localStorage.popCost = popCost;
+        localStorage.popPS = popPS;
+
+        localStorage.food = food;
+        localStorage.foodPS = foodPS;
+        localStorage.foodClick = foodClick;
+        localStorage.foodLimit = foodLimit;
+
+        localStorage.foodUpClickCost = foodUpClickCost;
+        localStorage.foodNumberOfTimesUpgraded = foodNumberOfTimesUpgraded;
+
+        localStorage.dosh = dosh;
+        localStorage.doshPS = doshPS;
+        localStorage.doshClick = doshClick;
+        localStorage.doshUpClickCost = doshUpClickCost;
+        localStorage.doshNumberOfTimesUpgraded = doshNumberOfTimesUpgraded;
+
+        localStorage.houses = houses;
+        localStorage.houseUpgradeCost = houseUpgradeCost;
+        localStorage.houseNumberOfUpgrades = houseNumberOfUpgrades;
+        localStorage.popPerHouse = popPerHouse;
+        localStorage.houseCost = houseCost;
+
+        localStorage.farms = farms;
+        localStorage.farmCost = farmCost;
+        localStorage.mines = mines;
+        localStorage.mineCost = mineCost;
+        localStorage.cloneVats = cloneVats;
+        localStorage.cloneVatCost = cloneVatCost;
+    }
+}
+
 var tick = setInterval(upkeep, 1000);
 //Handles all ticks, food per sec, dosh per sec, pop per sec, food drain.
 function upkeep() {
@@ -225,4 +301,10 @@ function upkeep() {
         population--;
     }
     update();
+}
+
+var dontsave = false;
+function reset() {
+    dontsave = true;
+    localStorage.clear();
 }

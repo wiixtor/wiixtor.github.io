@@ -1,5 +1,6 @@
 //People in village
 var population = 0;
+var basePopCost = 50;
 var popCost = 50;
 var popPS = 0;
 
@@ -9,6 +10,7 @@ var foodPS = 0;
 var foodClick = 1;
 var foodLimit = 100;
 
+var baseFoodUpClickCost = 10;
 var foodUpClickCost = 10;
 var foodNumberOfTimesUpgraded = 0;
 
@@ -16,6 +18,7 @@ var foodNumberOfTimesUpgraded = 0;
 var dosh = 0;
 var doshPS = 0;
 var doshClick = 1;
+var baseDoshUpClickCost = 10;
 var doshUpClickCost = 10;
 var doshNumberOfTimesUpgraded = 0;
 
@@ -25,18 +28,24 @@ var cloneVatsResearched = 0;
 
 //Buildings
 var houses = 0;
+var baseHouseUpgradeCost = 1000;
 var houseUpgradeCost = 1000;
 var houseNumberOfUpgrades = 0;
 var popPerHouse = 1;
+var baseHouseCost = 100;
 var houseCost = 100;
 
 var farms = 0;
+var baseFarmCost = 100;
 var farmCost = 100;
 var mines = 0;
+var baseMineCost = 100;
 var mineCost = 100;
 var cloneVats = 0;
+var baseCloneVatCost = 10000;
 var cloneVatCost = 10000;
 var laboratories = 0;
+var baseLaboratoryCost = 3000;
 var laboratoryCost = 3000;
 
 function farm() {
@@ -48,7 +57,7 @@ function farm() {
 function upFarmClick(){
     if(dosh >= foodUpClickCost) {
         dosh -= foodUpClickCost;
-        foodUpClickCost = Math.round((10+foodUpClickCost) * 1.5);
+        updateCosts();
         foodClick += Math.ceil(1 + (foodNumberOfTimesUpgraded*0.5));
         foodNumberOfTimesUpgraded++;
         addEventLogMsg("Food farming skill improved");
@@ -64,7 +73,7 @@ function makeDosh() {
 function upDoshClick(){
     if(dosh >= doshUpClickCost) {
         dosh -= doshUpClickCost;
-        doshUpClickCost = Math.round((10+doshUpClickCost) * 1.5);
+        updateCosts();
         doshClick += Math.ceil(1 + (doshNumberOfTimesUpgraded*0.5));
         doshNumberOfTimesUpgraded++;
         addEventLogMsg("Dosh making skill improved");
@@ -76,7 +85,7 @@ function populate() {
     if (food >= popCost && (population+1) <= (houses * popPerHouse)) {
         population++;
         food -= popCost;
-        popCost = Math.round((10+popCost) * 1.5);
+        updateCosts();
         addEventLogMsg("Another villager joined your village");
     }
     update();
@@ -86,7 +95,7 @@ function buildHouse(){
     if (dosh >= houseCost) {
         dosh -= houseCost;
         houses++;
-        houseCost = Math.round((10+houseCost) * 1.5);
+        updateCosts();
         addEventLogMsg("Built a house")
     }
     update();
@@ -96,7 +105,7 @@ function buildFarm(){
     if (dosh >= farmCost) {
         dosh -= farmCost;
         farms++;
-        farmCost = Math.round((10+farmCost) * 1.5);
+        updateCosts();
         foodPS++;
         foodLimit = Math.round((10+foodLimit) * 1.5);
         addEventLogMsg("Built a farm");
@@ -108,7 +117,7 @@ function buildMine(){
     if (dosh >= mineCost) {
         dosh -= mineCost;
         mines++;
-        mineCost = Math.round((10+mineCost) * 1.5);
+        updateCosts();
         doshPS++;
         addEventLogMsg("Built a mine");
     }
@@ -119,7 +128,7 @@ function buildCloneVat(){
     if (dosh >= cloneVatCost) {
         dosh -= cloneVatCost;
         cloneVats++;
-        cloneVatCost = Math.round((10+cloneVatCost) * 1.5);
+        updateCosts();
         popPS++;
         addEventLogMsg("Built a clone vat, clone production initiated");
     }
@@ -130,7 +139,7 @@ function buildLaboratory() {
     if (dosh >= laboratoryCost) {
         dosh -= laboratoryCost;
         laboratories++;
-        laboratoryCost = Math.round((10+laboratoryCost) * 1.5);
+        updateCosts();
         addEventLogMsg("Built a laboratory, science commenced");
     }
     update();
@@ -141,7 +150,7 @@ function upgradeHouse(){
         dosh -= houseUpgradeCost;
         popPerHouse++;
         houseNumberOfUpgrades++;
-        houseUpgradeCost = Math.round((10+houseUpgradeCost) * 1.5);
+        updateCosts();
         addEventLogMsg("Upgraded houses, each house can now hold " + (houseNumberOfUpgrades + 1) + " villagers");
     }
     update();
@@ -325,7 +334,7 @@ function update() {
     doshCIObj.innerHTML = Math.ceil(1 + (doshNumberOfTimesUpgraded*0.1));
     foodCIObj.innerHTML = Math.ceil(1 + (foodNumberOfTimesUpgraded*0.1));
     laboratoriesObj.innerHTML = laboratories;
-    laboratoryCostObj.innerHTML = laboratoryCost;
+    laboratoryCostObj.innerHTML = laboratoryCost + " dosh";
     scienceObj.innerHTML = science;
     sciencePSID.innerHTML = laboratories;
 
@@ -396,9 +405,6 @@ var tick = setInterval(upkeep, 1000);
 //Handles all ticks, food per sec, dosh per sec, pop per sec, food drain.
 function upkeep() {
     food = food + foodPS - population;
-    if(food > foodLimit) {
-        food = foodLimit;
-    }
     dosh += (doshPS * population);
     if (food > 0) {
         population += popPS;
@@ -419,8 +425,26 @@ function upkeep() {
             addEventLogMsg("A villager starved to death");
         }
     }
+    if(food > foodLimit) {
+        food = foodLimit;
+    } else if (food < 0) {
+        food = 0;
+    }
     science += laboratories;
+    updateCosts();
     update();
+}
+
+function updateCosts() {
+    popCost = Math.round(Math.pow(1.5, population) * basePopCost);
+    houseCost = Math.round(Math.pow(1.5, houses) * baseHouseCost);
+    houseUpgradeCost = Math.round(Math.pow(1.5, houseNumberOfUpgrades) * baseHouseUpgradeCost);
+    mineCost = Math.round(Math.pow(1.5, mines) * baseMineCost);
+    laboratoryCost = Math.round(Math.pow(1.5, laboratories) * baseLaboratoryCost);
+    foodUpClickCost = Math.round(Math.pow(1.5, foodNumberOfTimesUpgraded) * baseFoodUpClickCost);
+    farmCost = Math.round(Math.pow(1.5, farms) * baseFarmCost);
+    doshUpClickCost = Math.round(Math.pow(1.5, doshNumberOfTimesUpgraded) * baseDoshUpClickCost);
+    cloneVatCost = Math.round(Math.pow(1.5, cloneVats) * baseCloneVatCost);
 }
 
 var dontsave = false;
